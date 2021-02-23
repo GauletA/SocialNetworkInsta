@@ -7,7 +7,6 @@ const ThemeProvider = ({ children }) => {
   const {
     theme: { value },
   } = useConnect();
-
   return <MuiProvider theme={value}>{children}</MuiProvider>;
 };
 

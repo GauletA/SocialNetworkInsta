@@ -3,6 +3,9 @@ import {
   getStatusF,
   getStatus,
   getId,
+  getLastName,
+  getName,
+  getPicture,
   getMyProfile,
   getMyProfileStatusF,
   getMyIdProfile,
@@ -65,6 +68,42 @@ describe('selectors | profile', () => {
       const id = 'id';
       const state = { id };
       expect(getId(state)).toEqual(id);
+    });
+  });
+
+  describe('getlastName', () => {
+    it('should get undefined when called with empty state', () => {
+      expect(getLastName(undefined)).toBe(undefined);
+    });
+
+    it('should get lastName', () => {
+      const lastName = 'lastName';
+      const state = { lastName };
+      expect(getLastName(state)).toEqual(lastName);
+    });
+  });
+
+  describe('getName', () => {
+    it('should get undefined when called with empty state', () => {
+      expect(getName(undefined)).toBe(undefined);
+    });
+
+    it('should get name', () => {
+      const name = 'name';
+      const state = { name };
+      expect(getName(state)).toEqual(name);
+    });
+  });
+
+  describe('getPicture', () => {
+    it('should get undefined when called with empty state', () => {
+      expect(getPicture(undefined)).toBe(undefined);
+    });
+
+    it('should get picture', () => {
+      const picture = 'picture';
+      const state = { picture };
+      expect(getPicture(state)).toEqual(picture);
     });
   });
 

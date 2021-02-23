@@ -1,4 +1,4 @@
-import { prop, omit, pipe, map, filter, propOr, find, propEq, isNil } from 'ramda';
+import { prop, omit, pipe, map, filter, propOr, find, propEq, isNil, mapObjIndexed,values } from 'ramda';
 
 import { createSelector } from 'reselect';
 import { FOLLOW, FOLLOWING, FOLLOW_AND_FOLLOWING, ME, USER_ACTIONS } from '../constants';
@@ -7,14 +7,26 @@ export const getProfile = prop('profile');
 export const getStatusF = propOr([], 'statusFollow');
 export const getStatus = prop('status');
 export const getId = prop('id');
+export const getName = prop('name');
+export const getPicture = prop('picture');
+export const getLastName = prop('lastName');
 
 export const getMyProfile = createSelector(getProfile, prop('myProfile'));
+
 export const getMyProfileStatusF = createSelector(getMyProfile, getStatusF);
 export const getMyIdProfile = createSelector(getMyProfile, getId);
+export const getMyName = createSelector(getMyProfile, getName);
+export const getMyPicture = createSelector(getMyProfile, getPicture);
+export const getMyLastName = createSelector(getMyProfile, getLastName);
 
 export const getOtherProfile = createSelector(getProfile, prop('otherProfile'));
 
 export const getProfileByKey = (id) => createSelector(getOtherProfile, prop(id));
+
+export const getPictureByKey = (id) => createSelector(getProfileByKey(id), getPicture); // will test!
+export const getNameByKey = (id) => createSelector(getProfileByKey(id), getName); // will test!
+
+export const getByKeyW = (id) => createSelector(getOtherProfile, prop(id));
 
 export const profileFollow = (isFollow, isFollowing) => (profile) => ({
   ...omit(['statusFollow'], profile),
@@ -68,3 +80,7 @@ export const getProfilesByKey = (profiles) => (state) =>
           )(state),
         profiles,
       );
+
+// will test!
+export const getProfilesById = (profiles) => (state) => (isNil(profiles) || isNil(state) || typeof profiles !== 'object' || typeof state !== 'object') ? [] :
+  pipe(mapObjIndexed((_, key) => pipe(getProfileByKey(key), omit(["statusFollow"]))(state)), values)(profiles)

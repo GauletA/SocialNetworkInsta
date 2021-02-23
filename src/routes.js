@@ -54,4 +54,22 @@ const routes = [
   },
 ];
 
+export const routesNotLog = [
+  {
+    path: LOGIN_ROUTE_PATH,
+    component: Login,
+    exact: true,
+  },
+  {
+    path: SIGNUP_ROUTE_PATH,
+    component: Signup,
+    exact: true,
+  },
+  {
+    path: FORGOT_PASSWORD_ROUTE_PATH,
+    component: ForgotPassword,
+    exact: true,
+  },
+];
+
 export default Object.freeze(routes);

@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { map } from 'ramda';
 
-import routes, { DEFAULT_ROUTE_PATH } from '../../routes';
-import NavigationLayout from '../NavigationLayout';
+import routes, { DEFAULT_ROUTE_PATH, routesNotLog } from '../../routes';
 import { useApp } from './hooks';
+import NavigationLayout from '../NavigationLayout';
 
-const MakeRoutes = () => (
+const MakeRoutes = ({routes}) => (
   <Switch>
     {map(
       (route) => (
@@ -19,19 +19,14 @@ const MakeRoutes = () => (
 );
 
 const App = () => {
-  const history = useHistory();
-  const { myProfile } = useApp();
+  const { login } = useApp();
 
-  useEffect(() => {
-    myProfile ? history.push('/') : history.push('/login');
-  }, [myProfile, history]);
-
-  return myProfile ? (
-    <NavigationLayout>
-      <MakeRoutes />
+  return login ? (
+    <NavigationLayout >
+      <MakeRoutes routes={routes}/>
     </NavigationLayout>
   ) : (
-    <MakeRoutes />
+      <MakeRoutes routes={routesNotLog}/>
   );
 };
 

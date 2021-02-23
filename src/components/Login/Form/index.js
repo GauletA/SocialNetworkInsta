@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Form, Field } from 'react-final-form';
+import { useHistory } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -16,8 +17,13 @@ import { useConnect } from './hooks';
 
 const LoginForm = () => {
   const classes = useStyles();
-  const { setLogin } = useConnect();
+  const { setLogin, login } = useConnect();
   const { value: showPassword, toggle: togglePasswordView } = useBoolean();
+  const history = useHistory();
+
+  useEffect(() => {
+    login ? history.push('/') : history.push('/login')
+  }, [login, history]);
 
   return (
     <Form

@@ -1,9 +1,18 @@
 // Above that will break the home page layout
 export const WRAPPER_WIDTH = 940;
 
-export const PROFILE = {
-  login: 'login-profile',
+export const LOGIN = {
+  login: 'user-login',
 };
+
+export const PROFILE = {
+  initialStateProfile: 'initial-state-profile'
+}
+
+export const PRIVATEMESSAGES = {
+  initialStatePrivateMessages: 'initial-state-privatemessages',
+  putNewMessageById: 'put-new-message-by-id'
+}
 
 export const THEMES = {
   dark: 'dark-theme',

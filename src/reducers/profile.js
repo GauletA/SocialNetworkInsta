@@ -1,14 +1,12 @@
 import { PROFILE } from '../constants';
 
 const initialState = {
-  myProfile: undefined,
-  otherProfile: {},
 };
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case PROFILE.login:
-      return { ...action.value };
+    case PROFILE.initialStateProfile:
+      return { ...action.state }
     default:
       return state;
   }

@@ -13,41 +13,41 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 
 const mapMessages = addIndex(map);
 
-const Picture = ({ src, isMy }) => {
+const Picture = ({ src, isMe }) => {
   const classes = useStyles();
 
   return (
-    <ListSubheader className={classNames({ [classes.headerCommentaryLeftPicture]: isMy })} disableGutters>
+    <ListSubheader className={classNames({ [classes.headerCommentaryLeftPicture]: isMe })} disableGutters>
       <img className={classes.pictureHeaderBox} src={src} alt="imgProfile" />
     </ListSubheader>
   );
 };
 Picture.prototype = {
-  isMy: bool.isRequired,
+  isMe: bool.isRequired,
   src: string.isRequired,
 };
 
-const TypographyComment = ({ message, isMy }) => {
+const TypographyComment = ({ message, isMe }) => {
   const classes = useStyles();
 
   return (
-    <Typography className={classNames(classes.text, { [classes.textRight]: !isMy })} variant="body2" gutterBottom>
+    <Typography className={classNames(classes.text, { [classes.textRight]: !isMe })} variant="body2" gutterBottom>
       <FormattedMessage {...messages.message} values={{ message }} />
     </Typography>
   );
 };
 TypographyComment.prototype = {
   message: string.isRequired,
-  isMy: bool.isRequired,
+  isMe: bool.isRequired,
 };
 
-const Messages = ({ myMessages = [] }) => (
+const Messages = ({ myMessages = [], src}) => (
   <>
     {mapMessages(
-      ({ isMy, src, message }, index) => (
-        <Grid container alignItems="flex-start" key={index} justify={!isMy ? 'flex-end' : 'flex-start'}>
-          {isMy && <Picture src={src} key={index} isMy={isMy} />}
-          <TypographyComment message={message} isMy={isMy} />
+      ({ isMe, message }, index) => (
+        <Grid container alignItems="flex-start" key={index} justify={!isMe ? 'flex-end' : 'flex-start'}>
+          {isMe && <Picture src={src} key={index} isMe={isMe} />}
+          <TypographyComment message={message} isMe={isMe} />
         </Grid>
       ),
       myMessages,

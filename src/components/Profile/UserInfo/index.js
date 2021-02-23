@@ -71,7 +71,7 @@ Header.propTypes = {
   lastName: string,
 };
 
-const Stats = ({ openFollowersMenu, openFollowingMenu, minify }) => {
+const Stats = ({ numberFollowers, numberFollowing, openFollowersMenu, openFollowingMenu, minify }) => {
   const classes = useStyles();
 
   const numberDisplay = minify ? 'initial' : 'inline';
@@ -87,13 +87,13 @@ const Stats = ({ openFollowersMenu, openFollowingMenu, minify }) => {
       </Grid>
       <Grid item className={classes.clickableStats} onClick={openFollowersMenu}>
         <Typography display={numberDisplay} className={classes.number}>
-          53453
+          {numberFollowers}
         </Typography>
         <Typography component={FormattedMessage} {...messages.followers} />
       </Grid>
       <Grid item className={classes.clickableStats} onClick={openFollowingMenu}>
         <Typography display={numberDisplay} className={classes.number}>
-          200
+          {numberFollowing}
         </Typography>
         <Typography component={FormattedMessage} {...messages.following} />
       </Grid>
@@ -152,7 +152,12 @@ const UserInfo = ({
             </Grid>
             <Hidden smDown>
               <Grid item>
-                <Stats openFollowersMenu={openFollowersMenu} openFollowingMenu={openFollowingMenu} />
+                <Stats
+                  numberFollowers={followers.length}
+                  numberFollowing={following.length}
+                  openFollowersMenu={openFollowersMenu}
+                  openFollowingMenu={openFollowingMenu}
+                />
               </Grid>
             </Hidden>
             <Grid item>
@@ -164,7 +169,13 @@ const UserInfo = ({
       <Hidden smUp>{!ownProfile && <Actions className={classes.actionsXs} action={USER_ACTIONS.follow} />}</Hidden>
       <Divider className={classes.divider} />
       <Hidden mdUp>
-        <Stats openFollowersMenu={openFollowersMenu} openFollowingMenu={openFollowingMenu} minify />
+        <Stats
+          numberFollowers={followers.length}
+          numberFollowing={following.length}
+          openFollowersMenu={openFollowersMenu}
+          openFollowingMenu={openFollowingMenu}
+          minify
+        />
         <Divider className={classes.divider} />
       </Hidden>
     </>

@@ -7,14 +7,12 @@ import Wrapper from '../Wrapper';
 import UserInfo from './UserInfo';
 import Posts from './Posts';
 import useStyles from './styles';
-import { useProfile } from './hook';
+import { useProfile } from './hooks';
 
 const Profile = () => {
   const classes = useStyles();
   const { id } = useParams();
-  const { profile, test } = useProfile(id);
-
-  console.log(test);
+  const { profile } = useProfile(id);
 
   return (
     <Wrapper className={classes.wrapper}>

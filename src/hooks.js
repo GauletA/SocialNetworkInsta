@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { getPrivateMessages, getPrivateMessagesByKey } from './selectors/privateMessages';
+import { getProfilesById, getPictureByKey, getNameByKey } from './selectors/profile';
 
 export const useBoolean = (defaultValue = false) => {
   const [value, setValue] = useState(defaultValue);
@@ -35,9 +39,31 @@ export const useInput = (handleSubmit) => {
   return {
     value,
     handleChange: (event) => setValue(event.target.value),
-    handleSend: () => {
-      handleSubmit(value);
+    handleSend: (id) => () => {
+      handleSubmit({id, value});
       setValue('');
     },
+  };
+};
+
+export const usePrivateMessage = () => {
+  const [key, setKey] = useState('alexGaulet');
+  const { value: open, setTrue: handleClickOpen, setFalse: onClose } = useBoolean();
+  const statePrivateMessages = useSelector(getPrivateMessagesByKey(key))
+
+  const handleClickOpenAndUpdateState = (id) => () => {
+    setKey(id)
+    handleClickOpen()
+  }
+
+  return {
+    id: key,
+    srcUser: useSelector(getPictureByKey(key)),
+    nameUser: useSelector(getNameByKey(key)),
+    statePrivateMessages,
+    handleClickOpenAndUpdateState,
+    open,
+    onClose,
+    profiles: useSelector(getProfilesById(useSelector(getPrivateMessages)))
   };
 };

@@ -1,12 +1,7 @@
 import React from 'react';
 
-import { func, bool, object } from 'prop-types';
+import { func, bool, object, array, string } from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import InputCommentary from '../InputCommentary';
-
-import useStyles from './styles';
-import Messages from '../Messages';
-import messages from './messages';
 
 import { useTheme } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,99 +13,16 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
 import GoBackIcon from '../GoBackIcon';
 
-const myMessages = [
-  {
-    src: '/img/photoAlex.jpg',
-    message: 'Waaa trop',
-    name: 'Alexandre',
-    isMy: true,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: 'Oui tkt pas?',
-    name: 'Mounia',
-    isMy: false,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: 'Cliquez sur le lien ci-dessus pour ouvrir un éditeur en ligne.',
-    name: 'Marvin',
-    isMy: false,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: 'Waaa trop!',
-    name: 'Florian',
-    isMy: true,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message:
-      'Cliquez sur le lien ci-dessus pour ouvrir un éditeur en ligne. Vous êtes libres de faire quelques changements et de voir comment ils affectent l’affichage. La plupart des pages de ce guisMye auront des exemples modifiables comme celui-ci Cliquez sur le lien ci-dessus pour ouvrir un éditeur en ligne. Vous êtes libres de faire quelques changements et de voir comment ils affectent l’affichage. La plupart des pages de ce guide auront des exemples modifiables comme celui-ci',
+import InputCommentary from '../InputCommentary';
+import useStyles from './styles';
+import Messages from '../Messages';
+import messages from './messages';
+import { useInput } from '../../hooks';
+import { usePrivateMessage } from './hooks';
 
-    name: 'Mounia',
-    isMy: true,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: '<3 <3 <3!',
-    name: 'Mounia',
-    isMy: false,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: 'Cliquez sur le lien ci-dessus.',
-    name: 'Mounia',
-    isMy: false,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: 'Waaa trop',
-    name: 'Alexandre',
-    isMy: true,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: 'Cliquez sur le lien ci-dessus pour ouvrir un éditeur en ligne.',
-    name: 'Mounia',
-    isMy: false,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message:
-      'La plupart des pages de ce guide auront des exemples modifiables comme celui-ci Cliquez sur le lien ci-dessus pour ouvrir un éditeur en ligne. Vous êtes libres de faire quelques changements et de voir comment ils affectent l’affichage. La plupart des pages de ce guide auront des exemples modifiables comme celui-ci',
-    name: 'Marvin',
-    isMy: true,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: 'Waaa trop!',
-    name: 'Florian',
-    isMy: true,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: '<3 <3 <3!',
-    name: 'Mounia',
-    isMy: false,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: '<3 <3 <3!',
-    name: 'Mounia',
-    isMy: false,
-  },
-  {
-    src: '/img/photoAlex.jpg',
-    message: '<3 <3 <3!',
-    name: 'Mounia',
-    isMy: true,
-  },
-];
-
-const TypographyHeader = ({ className }) => (
+const TypographyHeader = ({ className, title }) => (
   <Typography className={className}>
-    <FormattedMessage {...messages.friendName} values={{ friendName: 'Marvin' }} />
+    <FormattedMessage {...messages.friendName} values={{ friendName: title }} />
   </Typography>
 );
 
@@ -118,7 +30,7 @@ TypographyHeader.prototype = {
   className: object.isRequired,
 };
 
-const Header = ({ onClose }) => {
+const Header = ({ onClose, title}) => {
   const classes = useStyles();
 
   return (
@@ -126,7 +38,7 @@ const Header = ({ onClose }) => {
       <Grid container className={classes.header} spacing={1} justify="flex-start" alignItems="center">
         <GoBackIcon handleClick={onClose} className={classes.goBackIcon} />
         <Grid container justify="center" alignItems="center" className={classes.boxTitle}>
-          <TypographyHeader className={classes.title} />
+          <TypographyHeader className={classes.title} title={title} />
         </Grid>
       </Grid>
     </DialogTitle>
@@ -135,11 +47,15 @@ const Header = ({ onClose }) => {
 
 Header.prototype = {
   onClose: func.isRequired,
+  title: string
 };
 
-const PrivateMessage = ({ open, onClose }) => {
+const PrivateMessage = ({id, open, onClose, privateMessages, srcUser, title}) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
+  const { handleSubmit } = usePrivateMessage()
+  const { value, handleChange: handleInputCommentary, handleSend: handleSendCommentary } = useInput(handleSubmit);
+  const inputProps = { value, handleInputCommentary, handleSendCommentary: handleSendCommentary(id) };
 
   return (
     <Dialog
@@ -147,6 +63,7 @@ const PrivateMessage = ({ open, onClose }) => {
         style: {
           backgroundColor: 'transparent',
           background: theme.palette.primary.dark,
+          minHeight: "80%"
         },
       }}
       fullWidth
@@ -155,12 +72,12 @@ const PrivateMessage = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
     >
-      <Header onClose={onClose} />
+      <Header onClose={onClose} title={title} />
       <DialogContent dividers={true}>
-        <Messages myMessages={myMessages} />
+        <Messages myMessages={privateMessages} src={srcUser} />
       </DialogContent>
       <DialogActions>
-        <InputCommentary />
+        <InputCommentary {...inputProps}/>
       </DialogActions>
     </Dialog>
   );
@@ -169,6 +86,9 @@ const PrivateMessage = ({ open, onClose }) => {
 PrivateMessage.prototype = {
   open: bool,
   onClose: func.isRequired,
+  privateMessages: array,
+  srcUser: string,
+  title: string
 };
 
 export default PrivateMessage;

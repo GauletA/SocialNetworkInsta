@@ -1,6 +1,15 @@
-import { useSelector } from 'react-redux';
-import { getMyProfile } from '../../selectors/profile';
+import { useSelector,useDispatch } from 'react-redux';
 
-export const useApp = () => ({
-  myProfile: useSelector(getMyProfile),
-});
+import { getLogin } from '../../selectors/login';
+import { setInitialProfile } from '../../actions/profile';
+import { setInitialPrivateMessages } from '../../actions/privateMessages';
+
+export const useApp = () => {
+  const dispatch = useDispatch();
+
+  dispatch(setInitialProfile())
+  dispatch(setInitialPrivateMessages())
+  return {
+    login: useSelector(getLogin),
+  };
+};
